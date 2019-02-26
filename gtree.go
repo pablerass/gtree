@@ -6,40 +6,40 @@ import (
 
 type Tree struct {
     value int
-    child1 *Tree
-    child2 *Tree
+    left *Tree
+    right *Tree
 }
 
-func New(value int) *Tree {
-    return &Tree{
+func New(value int) Tree {
+    return Tree{
         value: value,
-        child1: nil,
-        child2: nil,
     }
 }
 
-func (t *Tree) Insert(value int) {
+func (t Tree) Insert(value int) {
     if value < t.value {
-        if t.child1 == nil {
-            t.child1 = New(value)
+        if t.left == nil {
+            newTree := New(value)
+            t.left = &newTree
         } else {
-            t.child1.Insert(value)
+            t.left.Insert(value)
         }
     } else {
-        if t.child2 == nil {
-            t.child2 = New(value)
+        if t.right == nil {
+            newTree := New(value)
+            t.right = &newTree
         } else {
-            t.child2.Insert(value)
+            t.right.Insert(value)
         }
     }
 }
 
 func (t Tree) Print() {
-    if t.child1 != nil {
-        t.child1.Print()
+    if t.left != nil {
+        t.left.Print()
     }
     fmt.Println(t.value)
-    if t.child2 != nil {
-        t.child2.Print()
+    if t.right != nil {
+        t.right.Print()
     }
 }
