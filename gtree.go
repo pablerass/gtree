@@ -60,7 +60,7 @@ func (t *Tree) Print() {
     if t.left != nil {
         t.left.Print()
     }
-    fmt.Println(t.key)
+    fmt.Println(t.key, t.data)
     if t.right != nil {
         t.right.Print()
     }
