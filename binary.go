@@ -4,15 +4,15 @@ import (
     "fmt"
 )
 
-type Tree struct {
+type BinaryTree struct {
     key string
     data string
-    left *Tree
-    right *Tree
+    left *BinaryTree
+    right *BinaryTree
 }
 
-func New(key string, data string) *Tree {
-    return &Tree{
+func NewBinaryTree(key string, data string) *BinaryTree {
+    return &BinaryTree{
         key: key,
         data: data,
         left: nil,
@@ -20,25 +20,25 @@ func New(key string, data string) *Tree {
     }
 }
 
-func (t *Tree) Insert(key string, data string) {
+func (t *BinaryTree) Insert(key string, data string) {
     if key == t.key {
         t.data = data
     } else if key < t.key {
         if t.left == nil {
-            t.left = New(key, data)
+            t.left = NewBinaryTree(key, data)
         } else {
             t.left.Insert(key, data)
         }
     } else {
         if t.right == nil {
-            t.right = New(key, data)
+            t.right = NewBinaryTree(key, data)
         } else {
             t.right.Insert(key, data)
         }
     }
 }
 
-func (t *Tree) Search(key string) (string, bool) {
+func (t *BinaryTree) Search(key string) (string, bool) {
     if key == t.key {
         return t.data, true
     } else if key < t.key {
@@ -56,7 +56,7 @@ func (t *Tree) Search(key string) (string, bool) {
     }
 }
 
-func (t *Tree) Print() {
+func (t *BinaryTree) Print() {
     if t.left != nil {
         t.left.Print()
     }
