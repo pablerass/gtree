@@ -5,14 +5,18 @@ import (
 )
 
 type BinaryTree struct {
-    key string
-    data string
-    left *BinaryTree
-    right *BinaryTree
+    root *binaryNode
 }
 
-func NewBinaryTree(key string, data string) *BinaryTree {
-    return &BinaryTree{
+type binaryNode struct {
+    key string
+    data string
+    left *binaryNode
+    right *binaryNode
+}
+
+func newBinaryNode(key string, data string) *binaryNode {
+    return &binaryNode{
         key: key,
         data: data,
         left: nil,
@@ -21,47 +25,69 @@ func NewBinaryTree(key string, data string) *BinaryTree {
 }
 
 func (t *BinaryTree) Insert(key string, data string) {
-    if key == t.key {
-        t.data = data
-    } else if key < t.key {
-        if t.left == nil {
-            t.left = NewBinaryTree(key, data)
+    if t.root == nil {
+        t.root = newBinaryNode(key, data)
+    } else {
+        t.root.insert(key, data)
+    }
+}
+
+func (n *binaryNode) insert(key string, data string) {
+    if key == n.key {
+        n.data = data
+    } else if key < n.key {
+        if n.left == nil {
+            n.left = newBinaryNode(key, data)
         } else {
-            t.left.Insert(key, data)
+            n.left.insert(key, data)
         }
     } else {
-        if t.right == nil {
-            t.right = NewBinaryTree(key, data)
+        if n.right == nil {
+            n.right = newBinaryNode(key, data)
         } else {
-            t.right.Insert(key, data)
+            n.right.insert(key, data)
         }
     }
 }
 
 func (t *BinaryTree) Search(key string) (string, bool) {
-    if key == t.key {
-        return t.data, true
-    } else if key < t.key {
-        if t.left == nil {
+    if t.root == nil {
+        return "", false
+    } else {
+        return t.root.search(key)
+    }
+}
+
+func (n *binaryNode) search(key string) (string, bool) {
+    if key == n.key {
+        return n.data, true
+    } else if key < n.key {
+        if n.left == nil {
             return "", false
         } else {
-            return t.left.Search(key)
+            return n.left.search(key)
         }
     } else {
-        if t.right == nil {
+        if n.right == nil {
             return "", false
         } else {
-            return t.right.Search(key)
+            return n.right.search(key)
         }
     }
 }
 
 func (t *BinaryTree) Print() {
-    if t.left != nil {
-        t.left.Print()
+    if t.root != nil {
+        t.root.print()
     }
-    fmt.Println(t.key, t.data)
-    if t.right != nil {
-        t.right.Print()
+}
+
+func (n *binaryNode) print() {
+    if n.left != nil {
+        n.left.print()
+    }
+    fmt.Println(n.key, n.data)
+    if n.right != nil {
+        n.right.print()
     }
 }
