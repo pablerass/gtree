@@ -28,26 +28,57 @@ func (t *BinaryTree) Insert(key string, data string) {
     if t.root == nil {
         t.root = newBinaryNode(key, data)
     } else {
-        t.root.insert(key, data)
+        t.root.insert(newBinaryNode(key, data))
     }
 }
 
-func (n *binaryNode) insert(key string, data string) {
-    if key == n.key {
-        n.data = data
-    } else if key < n.key {
+func (n *binaryNode) insert(node *binaryNode) {
+    if n.key == node.key {
+        n.data = node.data
+    } else if node.key < n.key {
         if n.left == nil {
-            n.left = newBinaryNode(key, data)
+            n.left = node
         } else {
-            n.left.insert(key, data)
+            n.left.insert(node)
         }
     } else {
         if n.right == nil {
-            n.right = newBinaryNode(key, data)
+            n.right = node
         } else {
-            n.right.insert(key, data)
+            n.right.insert(node)
         }
     }
+}
+
+func (t *BinaryTree) Delete(key string) {
+    if t.root != nil {
+        t.root = t.root.delete(key)
+    }
+}
+
+func (n *binaryNode) delete(key string) *binaryNode {
+    if key == n.key {
+        if n.left == nil && n.right == nil {
+            n = nil
+        } else if n.left == nil {
+            n = n.right
+        } else if n.right == nil{
+            n = n.left
+        } else {
+            old := n
+            n = n.left
+            n.insert(old.right)
+        }
+    } else if key < n.key {
+        if n.left != nil {
+            n.left = n.left.delete(key)
+        }
+    } else {
+        if n.right != nil {
+            n.right = n.right.delete(key)
+        }
+    }
+    return n
 }
 
 func (t *BinaryTree) Search(key string) (string, bool) {
