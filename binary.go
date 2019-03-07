@@ -8,6 +8,11 @@ type BinaryTree struct {
     root *binaryNode
 }
 
+type Entry struct {
+    key string
+    data string
+}
+
 type binaryNode struct {
     key string
     data string
@@ -21,6 +26,14 @@ func newBinaryNode(key string, data string) *binaryNode {
         data: data,
         left: nil,
         right: nil,
+    }
+}
+
+func (t *BinaryTree) InsertEntry(entry Entry) {
+    if t.root == nil {
+        t.root = newBinaryNode(entry.key, entry.data)
+    } else {
+        t.root.insert(newBinaryNode(entry.key, entry.data))
     }
 }
 
@@ -107,18 +120,27 @@ func (n *binaryNode) search(key string) (string, bool) {
     }
 }
 
-func (t *BinaryTree) Print() {
+func (t *BinaryTree) TraverseInorder(ch chan Entry) {
+    defer close(ch)
     if t.root != nil {
-        t.root.print()
+        t.root.traverseInorder(ch)
     }
 }
 
-func (n *binaryNode) print() {
+func (n *binaryNode) traverseInorder(ch chan Entry) {
     if n.left != nil {
-        n.left.print()
+        n.left.traverseInorder(ch)
     }
-    fmt.Println(n.key, n.data)
+    ch <- Entry{key: n.key, data: n.data}
     if n.right != nil {
-        n.right.print()
+        n.right.traverseInorder(ch)
+    }
+}
+
+func (t *BinaryTree) Print() {
+    ch := make(chan Entry)
+    go t.TraverseInorder(ch)
+    for entry := range ch {
+        fmt.Println(entry.key, entry.data)
     }
 }
