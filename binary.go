@@ -120,11 +120,15 @@ func (n *binaryNode) search(key string) (string, bool) {
     }
 }
 
-func (t *BinaryTree) TraverseInorder(ch chan Entry) {
-    defer close(ch)
-    if t.root != nil {
-        t.root.traverseInorder(ch)
-    }
+func (t *BinaryTree) TraverseInorder() <-chan Entry {
+    ch := make(chan Entry)
+    go func() {
+        if t.root != nil {
+            t.root.traverseInorder(ch)
+        }
+        close(ch)
+    }()
+    return ch
 }
 
 func (n *binaryNode) traverseInorder(ch chan Entry) {
@@ -138,8 +142,7 @@ func (n *binaryNode) traverseInorder(ch chan Entry) {
 }
 
 func (t *BinaryTree) Print() {
-    ch := make(chan Entry)
-    go t.TraverseInorder(ch)
+    ch := t.TraverseInorder()
     for entry := range ch {
         fmt.Println(entry.key, entry.data)
     }
