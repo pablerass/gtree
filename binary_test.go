@@ -4,6 +4,13 @@ import (
     "testing"
 )
 
+//      (b, 2)
+//      /    \
+// (a, 1)    (c, 3)
+//                \
+//                (n, 3)
+//                /
+//           (d, 2)
 func ExampleInsert() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -21,6 +28,13 @@ func ExampleInsert() {
     // n 3
 }
 
+// (a, 1)
+//      \
+//      (c, 3)
+//           \
+//           (n, 3)
+//           /
+//      (d, 2)
 func ExampleDelete() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -45,7 +59,6 @@ func ExampleTraverseEmpty() {
     // Output:
 }
 
-// Common tree test structure
 //      (b, 2)
 //      /    \
 // (a, 1)    (c, 3)
@@ -72,6 +85,13 @@ func ExamplePreorder() {
     // d 2
 }
 
+//      (b, 2)
+//      /    \
+// (a, 1)    (c, 3)
+//                \
+//                (n, 3)
+//                /
+//           (d, 2)
 func ExamplePostorder() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -90,6 +110,7 @@ func ExamplePostorder() {
     // c 3
     // b 2
 }
+
 func TestSearch(t *testing.T) {
     var bt BinaryTree
     bt.Insert("a", "2")
