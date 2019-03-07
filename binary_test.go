@@ -39,6 +39,57 @@ func ExampleDelete() {
     // n 3
 }
 
+func ExampleTraverseEmpty() {
+    var bte BinaryTree
+    bte.Print()
+    // Output:
+}
+
+// Common tree test structure
+//      (b, 2)
+//      /    \
+// (a, 1)    (c, 3)
+//                \
+//                (n, 3)
+//                /
+//           (d, 2)
+func ExamplePreorder() {
+    var bt BinaryTree
+    bt.Insert("b", "2")
+    bt.Insert("c", "3")
+    bt.Insert("n", "3")
+    bt.Insert("d", "4")
+    bt.Insert("a", "1")
+    bt.Insert("d", "2")
+    for entry := range bt.TraversePreorder() {
+        entry.Print()
+    }
+    // Output:
+    // b 2
+    // a 1
+    // c 3
+    // n 3
+    // d 2
+}
+
+func ExamplePostorder() {
+    var bt BinaryTree
+    bt.Insert("b", "2")
+    bt.Insert("c", "3")
+    bt.Insert("n", "3")
+    bt.Insert("d", "4")
+    bt.Insert("a", "1")
+    bt.Insert("d", "2")
+    for entry := range bt.TraversePostorder() {
+        entry.Print()
+    }
+    // Output:
+    // a 1
+    // d 2
+    // n 3
+    // c 3
+    // b 2
+}
 func TestSearch(t *testing.T) {
     var bt BinaryTree
     bt.Insert("a", "2")

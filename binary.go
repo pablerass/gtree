@@ -2,6 +2,7 @@ package gtree
 
 import (
     "fmt"
+    "reflect"
 )
 
 type BinaryTree struct {
@@ -94,7 +95,7 @@ func (n *binaryNode) delete(key string) *binaryNode {
     return n
 }
 
-func (t *BinaryTree) Search(key string) (string, bool) {
+func (t BinaryTree) Search(key string) (string, bool) {
     if t.root == nil {
         return "", false
     } else {
@@ -102,7 +103,7 @@ func (t *BinaryTree) Search(key string) (string, bool) {
     }
 }
 
-func (n *binaryNode) search(key string) (string, bool) {
+func (n binaryNode) search(key string) (string, bool) {
     if key == n.key {
         return n.data, true
     } else if key < n.key {
@@ -120,30 +121,67 @@ func (n *binaryNode) search(key string) (string, bool) {
     }
 }
 
-func (t *BinaryTree) TraverseInorder() <-chan Entry {
+func traverse(t BinaryTree, methodName string) <-chan Entry {
     ch := make(chan Entry)
     go func() {
         if t.root != nil {
-            t.root.traverseInorder(ch)
+            method := reflect.ValueOf(t.root).MethodByName(methodName)
+            callableMethod := method.Interface().(func(chan Entry))
+            callableMethod(ch)
         }
         close(ch)
     }()
     return ch
 }
 
-func (n *binaryNode) traverseInorder(ch chan Entry) {
+func (t BinaryTree) TraverseInorder() <-chan Entry {
+    return traverse(t, "TraverseInorder")
+}
+
+func (t BinaryTree) TraversePreorder() <-chan Entry {
+    return traverse(t, "TraversePreorder")
+}
+
+func (t BinaryTree) TraversePostorder() <-chan Entry {
+    return traverse(t, "TraversePostorder")
+}
+
+func (n binaryNode) TraverseInorder(ch chan Entry) {
     if n.left != nil {
-        n.left.traverseInorder(ch)
+        n.left.TraverseInorder(ch)
     }
     ch <- Entry{key: n.key, data: n.data}
     if n.right != nil {
-        n.right.traverseInorder(ch)
+        n.right.TraverseInorder(ch)
     }
 }
 
-func (t *BinaryTree) Print() {
-    ch := t.TraverseInorder()
-    for entry := range ch {
-        fmt.Println(entry.key, entry.data)
+func (n binaryNode) TraversePreorder(ch chan Entry) {
+    ch <- Entry{key: n.key, data: n.data}
+    if n.left != nil {
+        n.left.TraversePreorder(ch)
     }
+    if n.right != nil {
+        n.right.TraversePreorder(ch)
+    }
+}
+
+func (n binaryNode) TraversePostorder(ch chan Entry) {
+    if n.left != nil {
+        n.left.TraversePostorder(ch)
+    }
+    if n.right != nil {
+        n.right.TraversePostorder(ch)
+    }
+    ch <- Entry{key: n.key, data: n.data}
+}
+
+func (t BinaryTree) Print() {
+    for entry := range t.TraverseInorder() {
+        entry.Print()
+    }
+}
+
+func (e Entry) Print() {
+    fmt.Println(e.key, e.data)
 }
