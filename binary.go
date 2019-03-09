@@ -176,6 +176,16 @@ func (n binaryNode) TraversePostorder(ch chan Entry) {
     ch <- Entry{key: n.key, data: n.data}
 }
 
+func (t *BinaryTree) Pack() {
+    if t.root != nil {
+        var nt BinaryTree
+        for entry := range t.TraversePreorder() {
+            nt.InsertEntry(entry)
+        }
+        t.root = nt.root
+    }
+}
+
 func (t BinaryTree) Print() {
     for entry := range t.TraverseInorder() {
         entry.Print()

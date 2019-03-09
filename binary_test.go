@@ -1,6 +1,7 @@
 package gtree
 
 import (
+    "fmt"
     "testing"
 )
 
@@ -109,6 +110,38 @@ func ExamplePostorder() {
     // n 3
     // c 3
     // b 2
+}
+
+//      (b, 2)
+//      /    \
+// (a, 1)    (c, 3)
+//                \
+//                (n, 3)
+//                /
+//           (d, 2)
+func ExamplePack() {
+    var bt BinaryTree
+    bt.Insert("b", "2")
+    bt.Insert("c", "3")
+    bt.Insert("n", "3")
+    bt.Insert("d", "4")
+    bt.Insert("a", "1")
+    bt.Insert("d", "2")
+    oldBtRoot := bt.root
+    bt.Pack()
+    for entry := range bt.TraversePreorder() {
+        entry.Print()
+    }
+    // TODO: Implement this in a different test type
+    if (oldBtRoot == bt.root) {
+        fmt.Println("equal root")
+    }
+    // Output:
+    // b 2
+    // a 1
+    // c 3
+    // n 3
+    // d 2
 }
 
 func TestSearch(t *testing.T) {
