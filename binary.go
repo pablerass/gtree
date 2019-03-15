@@ -2,7 +2,6 @@ package gtree
 
 import (
     "fmt"
-    "reflect"
 )
 
 type BinaryTree struct {
@@ -121,13 +120,11 @@ func (n binaryNode) search(key string) (string, bool) {
     }
 }
 
-func traverse(t BinaryTree, methodName string) <-chan Entry {
+func traverse(t BinaryTree, traverseFunction func(binaryNode, chan Entry)) <-chan Entry {
     ch := make(chan Entry)
     go func() {
         if t.root != nil {
-            method := reflect.ValueOf(t.root).MethodByName(methodName)
-            callableMethod := method.Interface().(func(chan Entry))
-            callableMethod(ch)
+            traverseFunction(*t.root, ch)
         }
         close(ch)
     }()
@@ -135,43 +132,43 @@ func traverse(t BinaryTree, methodName string) <-chan Entry {
 }
 
 func (t BinaryTree) TraverseInorder() <-chan Entry {
-    return traverse(t, "TraverseInorder")
+    return traverse(t, binaryNode.traverseInorder)
 }
 
 func (t BinaryTree) TraversePreorder() <-chan Entry {
-    return traverse(t, "TraversePreorder")
+    return traverse(t, binaryNode.traversePreorder)
 }
 
 func (t BinaryTree) TraversePostorder() <-chan Entry {
-    return traverse(t, "TraversePostorder")
+    return traverse(t, binaryNode.traversePostorder)
 }
 
-func (n binaryNode) TraverseInorder(ch chan Entry) {
+func (n binaryNode) traverseInorder(ch chan Entry) {
     if n.left != nil {
-        n.left.TraverseInorder(ch)
+        n.left.traverseInorder(ch)
     }
     ch <- Entry{key: n.key, data: n.data}
     if n.right != nil {
-        n.right.TraverseInorder(ch)
+        n.right.traverseInorder(ch)
     }
 }
 
-func (n binaryNode) TraversePreorder(ch chan Entry) {
+func (n binaryNode) traversePreorder(ch chan Entry) {
     ch <- Entry{key: n.key, data: n.data}
     if n.left != nil {
-        n.left.TraversePreorder(ch)
+        n.left.traversePreorder(ch)
     }
     if n.right != nil {
-        n.right.TraversePreorder(ch)
+        n.right.traversePreorder(ch)
     }
 }
 
-func (n binaryNode) TraversePostorder(ch chan Entry) {
+func (n binaryNode) traversePostorder(ch chan Entry) {
     if n.left != nil {
-        n.left.TraversePostorder(ch)
+        n.left.traversePostorder(ch)
     }
     if n.right != nil {
-        n.right.TraversePostorder(ch)
+        n.right.traversePostorder(ch)
     }
     ch <- Entry{key: n.key, data: n.data}
 }
