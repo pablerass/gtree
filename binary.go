@@ -121,7 +121,7 @@ func (n binaryNode) search(key string) (string, bool) {
 }
 
 func traverse(t BinaryTree, traverseFunction func(binaryNode, chan Entry)) <-chan Entry {
-    ch := make(chan Entry)
+    ch := make(chan Entry, 1)
     go func() {
         if t.root != nil {
             traverseFunction(*t.root, ch)
