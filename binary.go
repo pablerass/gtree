@@ -30,11 +30,7 @@ func newBinaryNode(key string, data string) *binaryNode {
 }
 
 func (t *BinaryTree) InsertEntry(entry Entry) {
-    if t.root == nil {
-        t.root = newBinaryNode(entry.key, entry.data)
-    } else {
-        t.root.insert(newBinaryNode(entry.key, entry.data))
-    }
+    t.Insert(entry.key, entry.data)
 }
 
 func (t *BinaryTree) Insert(key string, data string) {
@@ -121,7 +117,7 @@ func (n binaryNode) search(key string) (string, bool) {
 }
 
 func traverse(t BinaryTree, traverseFunction func(binaryNode, chan Entry)) <-chan Entry {
-    ch := make(chan Entry, 1)
+    ch := make(chan Entry)
     go func() {
         if t.root != nil {
             traverseFunction(*t.root, ch)
