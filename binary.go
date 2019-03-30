@@ -90,32 +90,6 @@ func (n *binaryNode) delete(key string) *binaryNode {
     return n
 }
 
-func (t BinaryTree) Search(key string) (string, bool) {
-    if t.root == nil {
-        return "", false
-    } else {
-        return t.root.search(key)
-    }
-}
-
-func (n binaryNode) search(key string) (string, bool) {
-    if key == n.key {
-        return n.data, true
-    } else if key < n.key {
-        if n.left == nil {
-            return "", false
-        } else {
-            return n.left.search(key)
-        }
-    } else {
-        if n.right == nil {
-            return "", false
-        } else {
-            return n.right.search(key)
-        }
-    }
-}
-
 func traverse(t BinaryTree, traverseFunction func(binaryNode, chan Entry)) <-chan Entry {
     ch := make(chan Entry)
     go func() {
