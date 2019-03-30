@@ -4,46 +4,65 @@ type BinarySearchTree struct {
     BinaryTree
 }
 
-type binarySearchNode struct {
-    binaryNode
-}
-
-func newSearchBinaryNode(key string, data string) *binarySearchNode {
-    binaryNode := binaryNode{
-        key: key,
-        data: data,
-        left: nil,
-        right: nil,
-    }
-    return &binarySearchNode {
-        binaryNode,
-    }
+func (t *BinarySearchTree) InsertEntry(entry Entry) {
+    t.Insert(entry.key, entry.data)
 }
 
 func (t *BinarySearchTree) Insert(key string, data string) {
     if t.root == nil {
-        t.root = &newSearchBinaryNode(key, data).binaryNode
+        t.root = newBinaryNode(key, data)
     } else {
-        (*binarySearchNode).insert(&t.root.(binarySearchNode), newSearchBinaryNode(key, data))
+        t.root.insertSearch(newBinaryNode(key, data))
     }
 }
 
-func (n *binarySearchNode) insert(node *binarySearchNode) {
+func (n *binaryNode) insertSearch(node *binaryNode) {
     if n.key == node.key {
         n.data = node.data
     } else if node.key < n.key {
         if n.left == nil {
             n.left = node
-        } else {
-            n.left.insert(node)
+       } else {
+            n.left.insertSearch(node)
         }
     } else {
         if n.right == nil {
             n.right = node
         } else {
-            n.right.insert(node)
+            n.right.insertSearch(node)
         }
     }
+}
+
+func (t *BinarySearchTree) Delete(key string) {
+    if t.root != nil {
+        t.root = t.root.deleteSearch(key)
+    }
+}
+
+func (n *binaryNode) deleteSearch(key string) *binaryNode {
+    if key == n.key {
+        if n.left == nil && n.right == nil {
+            n = nil
+        } else if n.left == nil {
+            n = n.right
+        } else if n.right == nil{
+            n = n.left
+        } else {
+            old := n
+            n = n.left
+            n.insert(old.right)
+        }
+    } else if key < n.key {
+        if n.left != nil {
+            n.left = n.left.delete(key)
+        }
+    } else {
+        if n.right != nil {
+            n.right = n.right.delete(key)
+        }
+    }
+    return n
 }
 
 func (t BinarySearchTree) Search(key string) (string, bool) {
@@ -54,7 +73,7 @@ func (t BinarySearchTree) Search(key string) (string, bool) {
     }
 }
 
-func (n binarySearchNode) search(key string) (string, bool) {
+func (n binaryNode) search(key string) (string, bool) {
     if key == n.key {
         return n.data, true
     } else if key < n.key {

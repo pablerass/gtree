@@ -4,13 +4,12 @@ import (
     "fmt"
 )
 
-//      (b, 2)
-//      /    \
-// (a, 1)    (c, 3)
-//                \
-//                (n, 3)
-//                /
-//           (d, 2)
+
+//         (b, 2)
+//         /    \
+//      (c, 3)  (n, 3)
+//      /    \  /
+// (d, 2)(a, 1) (x, 5)
 func ExampleBTInsert() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -19,22 +18,22 @@ func ExampleBTInsert() {
     bt.Insert("d", "4")
     bt.Insert("a", "1")
     bt.Insert("d", "2")
+    bt.Insert("x", "5")
     bt.Print()
     // Output:
+    // d 2
+    // c 3
     // a 1
     // b 2
-    // c 3
-    // d 2
+    // x 5
     // n 3
 }
 
-// (a, 1)
-//      \
-//      (c, 3)
-//           \
-//           (n, 3)
-//           /
-//      (d, 2)
+//     (c, 3)
+//     /    \
+//   (d, 2)(a, 1)
+//   /    \
+// (n, 3) (x, 5)
 func ExampleBTDelete() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -45,12 +44,14 @@ func ExampleBTDelete() {
     bt.Insert("a", "1")
     bt.Delete("b")
     bt.Insert("d", "2")
+    bt.Insert("x", "5")
     bt.Print()
     // Output:
-    // a 1
-    // c 3
-    // d 2
     // n 3
+    // d 2
+    // x 5
+    // c 3
+    // a 1
 }
 
 func ExampleBTTraverseEmpty() {
@@ -59,13 +60,11 @@ func ExampleBTTraverseEmpty() {
     // Output:
 }
 
-//      (b, 2)
-//      /    \
-// (a, 1)    (c, 3)
-//                \
-//                (n, 3)
-//                /
-//           (d, 2)
+//         (b, 2)
+//         /    \
+//      (c, 3)  (n, 3)
+//      /    \  /
+// (d, 2)(a, 1) (x, 5)
 func ExampleBTPreorder() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -74,24 +73,24 @@ func ExampleBTPreorder() {
     bt.Insert("d", "4")
     bt.Insert("a", "1")
     bt.Insert("d", "2")
+    bt.Insert("x", "5")
     for entry := range bt.TraversePreorder() {
         entry.Print()
     }
     // Output:
     // b 2
-    // a 1
     // c 3
     // n 3
     // d 2
+    // a 1
+    // x 5
 }
 
-//      (b, 2)
-//      /    \
-// (a, 1)    (c, 3)
-//                \
-//                (n, 3)
-//                /
-//           (d, 2)
+//         (b, 2)
+//         /    \
+//      (c, 3)  (n, 3)
+//      /    \  /
+// (d, 2)(a, 1) (x, 5)
 func ExampleBTPostorder() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -100,24 +99,24 @@ func ExampleBTPostorder() {
     bt.Insert("d", "4")
     bt.Insert("a", "1")
     bt.Insert("d", "2")
+    bt.Insert("x", "5")
     for entry := range bt.TraversePostorder() {
         entry.Print()
     }
     // Output:
-    // a 1
     // d 2
-    // n 3
+    // a 1
+    // x 5
     // c 3
+    // n 3
     // b 2
 }
 
-//      (b, 2)
-//      /    \
-// (a, 1)    (c, 3)
-//                \
-//                (n, 3)
-//                /
-//           (d, 2)
+//         (b, 2)
+//         /    \
+//      (c, 3)  (n, 3)
+//      /    \  /
+// (d, 2)(a, 1) (x, 5)
 func ExampleBTPack() {
     var bt BinaryTree
     bt.Insert("b", "2")
@@ -137,8 +136,9 @@ func ExampleBTPack() {
     }
     // Output:
     // b 2
-    // a 1
     // c 3
     // n 3
     // d 2
+    // a 1
+    // x 5
 }

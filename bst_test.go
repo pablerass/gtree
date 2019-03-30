@@ -4,13 +4,11 @@ import (
     "testing"
 )
 
-//      (b, 2)
-//      /    \
-// (a, 1)    (c, 3)
-//                \
-//                (n, 3)
-//                /
-//           (d, 2)
+//         (b, 2)
+//         /    \
+//      (c, 3)  (n, 3)
+//      /    \  /
+// (d, 4)(a, 1) (d, 2)
 func ExampleBSTInsert() {
     var bst BinarySearchTree
     bst.Insert("b", "2")
@@ -21,11 +19,12 @@ func ExampleBSTInsert() {
     bst.Insert("d", "2")
     bst.Print()
     // Output:
+    // d 4
+    // c 3
     // a 1
     // b 2
-    // c 3
-    // d 2
     // n 3
+    // d 2
 }
 
 // (a, 1)
